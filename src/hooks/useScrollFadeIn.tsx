@@ -1,15 +1,28 @@
-import { useRef, useEffect, useCallback, RefObject } from "react";
-import { ElementStyles, ScrollFadeInProps } from "../types/animationType";
+import {
+  useRef,
+  useEffect,
+  useCallback,
+  RefObject,
+  CSSProperties,
+} from "react";
 
-const useFadeIn = ({
+interface ScrollFadeInProps {
+  direction?: "up" | "down" | "left" | "right";
+  duration?: number;
+  delay?: number;
+}
+
+interface AnimatedItem<T extends HTMLElement> {
+  ref: RefObject<T>;
+  style: CSSProperties;
+}
+
+const useScrollFadeIn = <T extends HTMLElement>({
   direction = "up",
   duration = 1,
   delay = 0,
-}: ScrollFadeInProps = {}): {
-  ref: RefObject<HTMLDivElement>;
-  style: ElementStyles;
-} => {
-  const element = useRef<HTMLDivElement>(null);
+}: ScrollFadeInProps = {}): AnimatedItem<T> => {
+  const element = useRef<T>(null);
 
   const handleDirection = (name: string): string | undefined => {
     switch (name) {
@@ -22,7 +35,7 @@ const useFadeIn = ({
       case "right":
         return "translate3d(-50%, 0, 0)";
       default:
-        return;
+        return undefined;
     }
   };
 
@@ -58,4 +71,4 @@ const useFadeIn = ({
   };
 };
 
-export default useFadeIn;
+export default useScrollFadeIn;
